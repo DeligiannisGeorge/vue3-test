@@ -1,26 +1,37 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png" />
-  <HelloWorld msg="Welcome to Your Vue.js App" />
+  <ComponentA v-on="events" />
+  <ComponentB v-if="isAMounted" />
 </template>
 
 <script>
-import HelloWorld from "./components/HelloWorld.vue";
+import { defineAsyncComponent } from "vue";
+
+const ComponentA = defineAsyncComponent(() => import("./components/ComponentA.vue"));
+// import ComponentA from "./components/ComponentA.vue";
+const ComponentB = defineAsyncComponent(() => import("./components/ComponentB.vue"));
 
 export default {
   name: "App",
   components: {
-    HelloWorld,
+    ComponentA,
+    ComponentB,
+  },
+  data() {
+    return {
+      isAMounted: false,
+    };
+  },
+  computed: {
+    events() {
+      return {
+        vnodeMounted: this.onAMounted,
+      };
+    },
+  },
+  methods: {
+    onAMounted() {
+      this.isAMounted = true;
+    },
   },
 };
 </script>
-
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style>
